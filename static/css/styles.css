@@ -1,10 +1,11 @@
 body {
     min-height: 100vh;
     margin: 0;
-    background-color: #eaf6f6;
+    background-color: #e4f1fe;
     text-align: center;
     font-family: 'PT Serif', serif;
     font-weight: bolder;
+    color: #22313f;
     display:flex;
     flex-direction:column;
 }
@@ -28,7 +29,7 @@ body {
 
 
 input[type="file"]::file-selector-button {
-    background-color: #0d6efd;
+    background-color: #34495e;
     font-weight: bold;
     color: white;
     padding: 0.55rem 0.675rem;
@@ -38,10 +39,19 @@ input[type="file"]::file-selector-button {
   
 
   input[type="file"]::file-selector-button:hover {
-    background-color: #0a58ca;
+    background-color: #526980;
+    cursor: pointer;
+  }
+
+  input[type="submit"]::file-selector-button:hover {
+    background-color: #526980;
     cursor: pointer;
   }
 
 .upload-text {
     padding-bottom: 50px;
+}
+
+.btn-primary :hover {
+    background-color: #526980;
 }

@@ -11,6 +11,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     {% endblock %}
+    <style>
+      .btn-primary :hover {
+       background-color: #526980;
+      }
+    </style>
 </head>
 
 <body>
@@ -33,7 +38,7 @@
     <h3 class="upload-text">Upload your excel file to get started!</h3>
     <form method="post">
         <input name="file" id="file" type="file" />
-        <input class="btn btn-primary" type="submit" value="Get started">
+        <input class="btn btn-primary" type="submit" value="Get started" style="background-color: #34495e;">
     </form>
   </div>
   </article>
