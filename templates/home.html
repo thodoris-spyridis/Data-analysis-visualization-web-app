@@ -27,6 +27,7 @@
   </header>
   {% endblock %}
 
+  <article>
   <div class="main-block">
     <img class="data-logo" src="static\images\data-logo.png" alt="data logo">
     <h3 class="upload-text">Upload your excel file to get started!</h3>
@@ -35,8 +36,14 @@
         <input class="btn btn-primary" type="submit" value="Get started">
     </form>
   </div>
-  <footer>
-    
-  </footer>
+  </article>
+
+  {% block footer %}
+  <div class="container justify-content-center position-static">
+    <footer class="py-3 my-4">
+      <p class="text-center text-body-secondary">© {{ year }} T.Spyridis</p>
+    </footer>
+  </div>
+  {% endblock %}
 </body>
 </html>
