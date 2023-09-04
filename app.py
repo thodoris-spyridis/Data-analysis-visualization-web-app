@@ -6,13 +6,21 @@ from werkzeug.utils import secure_filename
 import os
 from wtforms.validators import InputRequired
 from flask_wtf.file import FileAllowed
+import pandas as pd
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "datathodoris1988#"
 app.config["UPLOAD_FOLDER"] = "static/files"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///file-data.db"
 
 
-class UploadFileForm(FlaskForm):
+db = SQLAlchemy()
+db.init_app(app)
+
+
+class UploadFileForm(FlaskForm):  #upload file form
     file = FileField("File", validators=[InputRequired(), FileAllowed(["xlsx"], "wrong format!")])
     submit = SubmitField("Upload File")
 
@@ -27,6 +35,9 @@ def upload_file():
     if form.validate_on_submit():
         file = form.file.data  #Grab the file
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config["UPLOAD_FOLDER"], secure_filename(file.filename)))  #Find the root directory and save the file after it is validated as secure
+        file_path = f"static/files/{file.filename}"
+        data = pd.read_excel(file_path, type=object)
+        os.remove(file_path)
         return "File has been uploaded"
     return render_template("upload.html", year=current_year, form=form)
 

@@ -27,6 +27,12 @@ body {
     flex-direction:column;
 }
 
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 input[type="file"]::file-selector-button {
     background-color: #34495e;
     font-weight: bold;
