@@ -36,11 +36,15 @@ def upload_file():
         file = form.file.data  #Grab the file
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config["UPLOAD_FOLDER"], secure_filename(file.filename)))  #Find the root directory and save the file after it is validated as secure
         file_path = f"static/files/{file.filename}"
-        data = pd.read_excel(file_path, type=object)
+        data = pd.read_excel(file_path)
         os.remove(file_path)
-        return "File has been uploaded"
+        flash(f"File {file.filename} has been uploaded")
     return render_template("upload.html", year=current_year, form=form)
 
+
+@app.route("/data", methods = ["POST", "GET"])
+def get_data():
+    return render_template("data.html")
 
 
 if __name__ == "__main__":

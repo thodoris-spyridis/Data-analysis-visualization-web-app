@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload page</title>
+    <title>{% block title %}Upload page{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,300&family=Libre+Baskerville&family=PT+Serif:wght@700&display=swap" rel="stylesheet">
@@ -14,7 +14,6 @@
 <body>
   
   <header class="gradient-background">
-
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -35,23 +34,11 @@
         </div>
       </div>
     </nav>
-
   </header>
 
   <article>
   <div class="main-block">
-    <img class="data-logo" src="static\images\data-logo.png" alt="data logo">
-    <h3 class="upload-text">Upload your excel file to get started!</h3>
-
-    <form method="post" enctype="multipart/form-data">
-      {{ form.hidden_tag() }}
-      {{ form.file() }}
-      {{ form.submit(class_="start-btn") }}
-    </form>
-    <br>
-    {% for message in get_flashed_messages() %}
-      <p>{{ message }}</p>
-    {% endfor %}
+    <h1>It works</h1>
   </div>
   </article>
 

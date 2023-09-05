@@ -2,7 +2,6 @@ body {
     min-height: 100vh;
     margin: 0;
     background-color: #e4f1fe;
-    text-align: center;
     font-family: 'PT Serif', serif;
     font-weight: bolder;
     color: #22313f;
@@ -11,15 +10,18 @@ body {
 }
 
 header {
-    min-height:50px;
-    padding: 50px 50px;
-    margin: auto;
+    background-color: #e1e0e9a8;
+    min-height:10px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    margin: 0;
 }
 
 article{ flex:1; }
 
 footer {
     min-height:50px;
+    text-align: center;
 }
 
 body {
@@ -27,10 +29,8 @@ body {
     flex-direction:column;
 }
 
-.main-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.main-block {
+    text-align: center;
 }
 
 input[type="file"]::file-selector-button {
@@ -65,3 +65,35 @@ input[type="file"]::file-selector-button:hover {
     padding-bottom: 50px;
 }
 
+.gradient-background {
+    background: linear-gradient(300deg, #e0ebeb, #a7bcb9, #24527a);
+    background-size: 180% 180%;
+    animation: gradient-animation 18s ease infinite;
+  }
+  
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+.btn{
+  margin-left:50px;
+  }
+
+.navbar-brand {
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    margin-right: 480px;
+}
+
+svg {
+    margin-right: 10px;
+}
