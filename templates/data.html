@@ -27,7 +27,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link active" href="#">Upload File</a>
+            <a class="nav-link active" href="{{ url_for('upload_file') }}">Upload File</a>
             <a class="nav-link active" href="{{ url_for('get_data') }}">Get Data</a>
             <a class="nav-link active" href="#">Visualize</a>
           </div>
@@ -37,9 +37,26 @@
   </header>
 
   <article>
-  <div class="main-block">
-    <h1>It works</h1>
-  </div>
+
+    <table class="table table-sm table-bordered border-primary table-light table-hover">
+      <thead>
+        <tr>
+          {% for column in columns %}
+          <th scope="col">{{ column }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for ind in preview.index %}
+        <tr>
+          {% for column in columns %}
+          <td>{{ preview[column][ind] }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
   </article>
 
   <div class="container justify-content-center position-static">

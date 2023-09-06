@@ -31,12 +31,14 @@ current_year = today.year
 
 @app.route("/", methods = ["POST", "GET"])
 def upload_file():
+    global data
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data  #Grab the file
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config["UPLOAD_FOLDER"], secure_filename(file.filename)))  #Find the root directory and save the file after it is validated as secure
         file_path = f"static/files/{file.filename}"
         data = pd.read_excel(file_path)
+        data = data.reset_index(drop=True)
         os.remove(file_path)
         flash(f"File {file.filename} has been uploaded")
     return render_template("upload.html", year=current_year, form=form)
@@ -44,7 +46,11 @@ def upload_file():
 
 @app.route("/data", methods = ["POST", "GET"])
 def get_data():
-    return render_template("data.html")
+    display_rows = data[0:10]
+    print(display_rows)
+    print(type(display_rows))
+    column_names = display_rows.columns
+    return render_template("data.html", preview=display_rows, columns=column_names)
 
 
 if __name__ == "__main__":

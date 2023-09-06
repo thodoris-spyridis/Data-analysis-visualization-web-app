@@ -91,9 +91,9 @@ input[type="file"]::file-selector-button:hover {
     font-size: 25px;
     display: flex;
     align-items: center;
-    margin-right: 480px;
 }
 
 svg {
     margin-right: 10px;
 }
+
