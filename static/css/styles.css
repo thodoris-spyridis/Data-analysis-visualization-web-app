@@ -1,45 +1,45 @@
 body {
-    min-height: 100vh;
-    margin: 0;
-    background-color: #e4f1fe;
-    font-family: 'PT Serif', serif;
-    font-weight: bolder;
-    color: #22313f;
-    display:flex;
-    flex-direction:column;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #e4f1fe;
+  font-family: 'PT Serif', serif;
+  font-weight: bolder;
+  color: #22313f;
+  display:flex;
+  flex-direction:column;
 }
 
 header {
-    background-color: #e1e0e9a8;
-    min-height:10px;
-    padding-bottom: 20px;
-    padding-top: 20px;
-    margin: 0;
+  background-color: #e1e0e9a8;
+  min-height:10px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  margin: 0;
 }
 
 article{ flex:1; }
 
 footer {
-    min-height:50px;
-    text-align: center;
+  min-height:50px;
+  text-align: center;
 }
 
 body {
-    display:flex;
-    flex-direction:column;
+  display:flex;
+  flex-direction:column;
 }
 
 .main-block {
-    text-align: center;
+  text-align: center;
 }
 
 input[type="file"]::file-selector-button {
-    background-color: #34495e;
-    font-weight: bold;
-    color: white;
-    padding: 0.55rem 0.675rem;
-    border: none;
-    border-radius: 8px;
+  background-color: #34495e;
+  font-weight: bold;
+  color: white;
+  padding: 0.55rem 0.675rem;
+  border: none;
+  border-radius: 8px;
   }
 
 input[type="file"]::file-selector-button:hover {
@@ -48,27 +48,27 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .start-btn {
-    background-color: #34495e;
-    font-weight: bold;
-    color: white;
-    padding: 0.55rem 0.66rem;
-    border: none;
-    border-radius: 8px;
+  background-color: #34495e;
+  font-weight: bold;
+  color: white;
+  padding: 0.55rem 0.66rem;
+  border: none;
+  border-radius: 8px;
 }
 
 .start-btn:hover {
-    background-color: #526980;
-    cursor: pointer;
+  background-color: #526980;
+  cursor: pointer;
 }
 
 .upload-text {
-    padding-bottom: 50px;
+  padding-bottom: 50px;
 }
 
 .gradient-background {
-    background: linear-gradient(300deg, #e0ebeb, #a7bcb9, #24527a);
-    background-size: 180% 180%;
-    animation: gradient-animation 18s ease infinite;
+  background: linear-gradient(300deg, #e0ebeb, #a7bcb9, #24527a);
+  background-size: 180% 180%;
+  animation: gradient-animation 18s ease infinite;
   }
   
   @keyframes gradient-animation {
@@ -88,12 +88,67 @@ input[type="file"]::file-selector-button:hover {
   }
 
 .navbar-brand {
-    font-size: 25px;
-    display: flex;
-    align-items: center;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.preview-title {
+  text-align: center;
 }
 
 svg {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
+.counts {
+  padding-top: 10px;
+}
+
+.data-form {
+  padding-left: 10px;
+}
+
+
+.selection {
+  color: white;
+  background-color: #34495e;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 150px;
+}
+
+.data-preview {
+  position: fixed;
+  bottom: 80px;
+  width: 100%;
+}
+
+.selection-label {
+  margin-left: 18px;
+}
+
+.calculate {
+  color: white;
+  background-color: #34495e;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 150px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.result {
+  position:relative;
+  top:1px;
+  display:inline-block;
+  border: 2px solid #34495e;
+  margin-left: 15px;
+  margin-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}

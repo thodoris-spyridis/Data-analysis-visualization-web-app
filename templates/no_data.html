@@ -37,58 +37,9 @@
   </header>
 
   <article>
-
-      <ul class="counts">
-        <li>Number of rows: {{ number_of_rows }}</li>
-        <li>Number of columns: {{ number_of_columns }}</li>
-      </ul>
-
-      <form class="data-form" method="post">
-        <label class="selection-label" for="column-name" style="font-size: large;">Select column</label><br>
-        <select class="selection" name="column-name" id="column-name">
-          {% for column in columns %}
-          <option value="{{ column }}">{{ column }}</option>
-          {% endfor %}
-        </select><br>
-        <label class="selection-label" for="action" style="font-size: large;">Select action</label><br>
-        <select class="selection" name="action" id="action">
-          <option value="average">Average</option>
-          <option value="min">Minimum</option>
-          <option value="max">Maximum</option>
-          <option value="unique-count">Count unique values</option>     
-        </select><br>
-        <input class="calculate" type="submit" value="Calculate">
-      </form>
-
-      {% for message in get_flashed_messages() %}
-      <h2><span class="result">{{ message }}</span></h2>
-      {% endfor %}
-
-    <div class="data-preview">
-    <h2 class="preview-title">Data preview</h2>
-    <form method="post">
-      <input type="submit">
-    </form>
-    <table class="table table-sm table-bordered border-primary table-light table-hover">
-      <thead style="font-size: larger;">
-        <tr>
-          {% for column in columns %}
-          <th scope="col">{{ column }}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for ind in preview.index %}
-        <tr>
-          {% for column in columns %}
-          <td>{{ preview[column][ind] }}</td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
+    {% for message in get_flashed_messages() %}
+        <h1>{{ message }}</h1>
+    {% endfor %}
   </article>
 
   <div class="container justify-content-center position-static">
