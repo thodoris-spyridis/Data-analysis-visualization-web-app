@@ -4,11 +4,18 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 import datetime
 from werkzeug.utils import secure_filename
-import os
+import os, glob
 from wtforms.validators import InputRequired
 from flask_wtf.file import FileAllowed
 import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
+<<<<<<< HEAD
+=======
+import matplotlib
+from matplotlib.figure import Figure
+
+>>>>>>> parent of d20fc5a (Revert "added visualization template")
+
 
 
 app = Flask(__name__)
@@ -23,14 +30,21 @@ db.init_app(app)
 
 
 class UploadFileForm(FlaskForm):  # upload file form
-    file = FileField(
-        "File", validators=[InputRequired(), FileAllowed(["xlsx"], "wrong format!")]
-    )
+    file = FileField("File", validators=[InputRequired(), FileAllowed(["xlsx"], "wrong format!")])
     submit = SubmitField("Upload File")
 
 
 today = datetime.date.today()
 current_year = today.year
+
+
+def clear_files_folder():
+    '''clears the files folder so we have on plot to display every time it runs'''
+    dir = r"static\files"
+    if len(list(os.scandir(dir))) != 0:
+        os.remove(r"static\files\plot.png")
+    else:
+        return
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -103,5 +117,51 @@ def get_data():
     )
 
 
+<<<<<<< HEAD
+=======
+@app.route("/visualize", methods=["POST", "GET"])
+def visualize():
+    if file_check == False:
+        return redirect("/no_data")
+    else:
+        column_names = my_data.columns
+    if request.method == "POST":
+        x_column = request.form["x-axis"]
+        y_column = request.form["y-axis"]
+        x_axis = my_data[x_column].to_list()
+        y_axis = my_data[y_column].to_list()
+        plot_type = request.form["plot-type"]
+        if plot_type == "Linechart":
+            fig = Figure(figsize=(6, 6))
+            ax = fig.subplots()
+            ax = plots.hist(fig, x_axis, y_axis)
+            ax.set_title("Bar chart")
+            data = plots.get_data(fig)
+            return render_template_string(
+            """
+            {% from 'plots/utils.html' import render_img %}
+            {{ render_img(data=data, alt_img='my_img') }}
+            """,   
+            data=data             
+            )
+        elif plot_type == "Bar-chart":
+            fig = Figure(figsize=(6, 6))
+            ax = fig.subplots()
+            ax = plots.bar(fig, x_axis, y_axis)
+            ax.set_title("Bar chart")
+            data = plots.get_data(fig)
+            return render_template_string(
+            """
+            {% from 'plots/utils.html' import render_img %}
+            {{ render_img(data=data, alt_img='my_img') }}
+            """,   
+            data=data             
+            )
+    return render_template("visualize.html", columns=column_names)
+
+
+
+
+>>>>>>> parent of d20fc5a (Revert "added visualization template")
 if __name__ == "__main__":
     app.run(debug=True)
