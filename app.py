@@ -13,12 +13,15 @@ from flask_sqlalchemy import SQLAlchemy
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import matplotlib
 from matplotlib.figure import Figure
 
 >>>>>>> parent of d20fc5a (Revert "added visualization template")
 
+=======
+>>>>>>> parent of fb19a28 (added visualization template)
 =======
 >>>>>>> parent of fb19a28 (added visualization template)
 =======
@@ -123,6 +126,7 @@ def get_data():
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 @app.route("/visualize", methods=["POST", "GET"])
 def visualize():
@@ -168,6 +172,8 @@ def visualize():
 
 
 >>>>>>> parent of d20fc5a (Revert "added visualization template")
+=======
+>>>>>>> parent of fb19a28 (added visualization template)
 =======
 >>>>>>> parent of fb19a28 (added visualization template)
 =======
