@@ -13,7 +13,6 @@ from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 
 
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "datathodoris1988#"
 app.config["UPLOAD_FOLDER"] = "static/files"
@@ -147,8 +146,6 @@ def visualize():
             plt.savefig(plot_file)
             plt.close()
     return render_template("visualize.html", columns=column_names, plot_pic=plot_file)
-
-
 
 
 if __name__ == "__main__":
