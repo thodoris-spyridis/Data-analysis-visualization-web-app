@@ -4,11 +4,12 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 import datetime
 from werkzeug.utils import secure_filename
-import os, glob
+import os
 from wtforms.validators import InputRequired
 from flask_wtf.file import FileAllowed
 import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 import matplotlib
@@ -16,6 +17,8 @@ from matplotlib.figure import Figure
 
 >>>>>>> parent of d20fc5a (Revert "added visualization template")
 
+=======
+>>>>>>> parent of fb19a28 (added visualization template)
 
 
 app = Flask(__name__)
@@ -30,21 +33,14 @@ db.init_app(app)
 
 
 class UploadFileForm(FlaskForm):  # upload file form
-    file = FileField("File", validators=[InputRequired(), FileAllowed(["xlsx"], "wrong format!")])
+    file = FileField(
+        "File", validators=[InputRequired(), FileAllowed(["xlsx"], "wrong format!")]
+    )
     submit = SubmitField("Upload File")
 
 
 today = datetime.date.today()
 current_year = today.year
-
-
-def clear_files_folder():
-    '''clears the files folder so we have on plot to display every time it runs'''
-    dir = r"static\files"
-    if len(list(os.scandir(dir))) != 0:
-        os.remove(r"static\files\plot.png")
-    else:
-        return
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -118,6 +114,7 @@ def get_data():
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 @app.route("/visualize", methods=["POST", "GET"])
 def visualize():
@@ -163,5 +160,7 @@ def visualize():
 
 
 >>>>>>> parent of d20fc5a (Revert "added visualization template")
+=======
+>>>>>>> parent of fb19a28 (added visualization template)
 if __name__ == "__main__":
     app.run(debug=True)
