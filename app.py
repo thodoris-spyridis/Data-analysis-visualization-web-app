@@ -1,37 +1,20 @@
-from flask import Flask, render_template, url_for, flash, request, redirect, render_template_string
-from flask_plots import Plots
+from flask import Flask, render_template, url_for, flash, request, redirect
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 import datetime
 from werkzeug.utils import secure_filename
-import os
+import os, glob
 from wtforms.validators import InputRequired
 from flask_wtf.file import FileAllowed
 import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import matplotlib
+from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 
->>>>>>> parent of d20fc5a (Revert "added visualization template")
-
-=======
->>>>>>> parent of fb19a28 (added visualization template)
-=======
->>>>>>> parent of fb19a28 (added visualization template)
-=======
->>>>>>> parent of fb19a28 (added visualization template)
-=======
->>>>>>> parent of fb19a28 (added visualization template)
 
 
 app = Flask(__name__)
-plots = Plots(app)
 app.config["SECRET_KEY"] = "datathodoris1988#"
 app.config["UPLOAD_FOLDER"] = "static/files"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///file-data.db"
@@ -42,9 +25,7 @@ db.init_app(app)
 
 
 class UploadFileForm(FlaskForm):  # upload file form
-    file = FileField(
-        "File", validators=[InputRequired(), FileAllowed(["xlsx"], "wrong format!")]
-    )
+    file = FileField("File", validators=[InputRequired(), FileAllowed(["xlsx"], "wrong format!")])
     submit = SubmitField("Upload File")
 
 
@@ -52,9 +33,18 @@ today = datetime.date.today()
 current_year = today.year
 
 
+def clear_files_folder():
+    '''clears the files folder so we have on plot to display every time it runs'''
+    dir = r"static\files"
+    if len(list(os.scandir(dir))) != 0:
+        os.remove(r"static\files\plot.png")
+    else:
+        return
+
+
 @app.route("/", methods=["POST", "GET"])
 def upload_file():
-    global my_data
+    global data
     global file_check
     file_check = False
 
@@ -69,8 +59,8 @@ def upload_file():
             )
         )  # Find the root directory and save the file after it is validated as secure
         file_path = f"static/files/{file.filename}"
-        my_data = pd.read_excel(file_path, dtype=object)
-        my_data = my_data.reset_index(drop=True)
+        data = pd.read_excel(file_path, dtype=object)
+        data = data.reset_index(drop=True)
         os.remove(file_path)
         file_check = True
         flash(f"File {file.filename} has been uploaded")
@@ -80,7 +70,7 @@ def upload_file():
 
 
 @app.route("/no_data", methods=["POST", "GET"])
-def no_my_data():
+def no_data():
     flash("No data available!")
     return render_template("no_data.html")
 
@@ -90,22 +80,23 @@ def get_data():
     if file_check == False:
         return redirect("/no_data")
     else:
-        display_rows = my_data[0:10]
+        display_rows = data[0:10]
         column_names = display_rows.columns
-        row_count = my_data.shape[0]
-        column_count = my_data.shape[1]
+        row_count = data.shape[0]
+        column_count = data.shape[1]
     if request.method == "POST":
+        clear_files_folder()
         column_name = request.form["column-name"]
         action = request.form["action"]
         try:
             if action == "average":
-                result = round(my_data[column_name].mean(), 2)
+                result = round(data[column_name].mean(), 2)
             elif action == "min":
-                result = my_data[column_name].min()
+                result = data[column_name].min()
             elif action == "max":
-                result = my_data[column_name].max()
+                result = data[column_name].max()
             else:
-                unique_values = {value for value in my_data[column_name].to_list()}
+                unique_values = {value for value in data[column_name].to_list()}
                 result = len(unique_values)
         except:
             flash("Action can not be performed on this column")
@@ -116,69 +107,49 @@ def get_data():
         year=current_year,
         preview=display_rows,
         columns=column_names,
-        all_my_data=my_data,
+        all_data=data,
         number_of_rows=row_count,
         number_of_columns=column_count
     )
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 @app.route("/visualize", methods=["POST", "GET"])
 def visualize():
+    matplotlib.use("agg")
+    plt.style.use("fivethirtyeight")
+    plot_file = os.path.join("static", "files", "plot.png")
     if file_check == False:
         return redirect("/no_data")
     else:
-        column_names = my_data.columns
+        column_names = data.columns
     if request.method == "POST":
         x_column = request.form["x-axis"]
         y_column = request.form["y-axis"]
-        x_axis = my_data[x_column].to_list()
-        y_axis = my_data[y_column].to_list()
+        x_axis = data[x_column].to_list()
+        y_axis = data[y_column].to_list()
         plot_type = request.form["plot-type"]
         if plot_type == "Linechart":
-            fig = Figure(figsize=(6, 6))
-            ax = fig.subplots()
-            ax = plots.hist(fig, x_axis, y_axis)
-            ax.set_title("Bar chart")
-            data = plots.get_data(fig)
-            return render_template_string(
-            """
-            {% from 'plots/utils.html' import render_img %}
-            {{ render_img(data=data, alt_img='my_img') }}
-            """,   
-            data=data             
-            )
+            clear_files_folder()
+            plt.plot(x_axis, y_axis)
+            plt.ylabel(y_column)
+            plt.xlabel(x_column)
+            plt.title(f"{y_column} by {x_column} {plot_type}")
+            plt.tight_layout()
+            plt.savefig(plot_file)
+            plt.close()
         elif plot_type == "Bar-chart":
-            fig = Figure(figsize=(6, 6))
-            ax = fig.subplots()
-            ax = plots.bar(fig, x_axis, y_axis)
-            ax.set_title("Bar chart")
-            data = plots.get_data(fig)
-            return render_template_string(
-            """
-            {% from 'plots/utils.html' import render_img %}
-            {{ render_img(data=data, alt_img='my_img') }}
-            """,   
-            data=data             
-            )
-    return render_template("visualize.html", columns=column_names)
+            clear_files_folder()
+            plt.bar(x_axis, y_axis)
+            plt.ylabel(y_column)
+            plt.xlabel(x_column)
+            plt.title(f"{y_column} by {x_column} {plot_type}")
+            plt.tight_layout()
+            plt.savefig(plot_file)
+            plt.close()
+    return render_template("visualize.html", columns=column_names, plot_pic=plot_file)
 
 
 
 
->>>>>>> parent of d20fc5a (Revert "added visualization template")
-=======
->>>>>>> parent of fb19a28 (added visualization template)
-=======
->>>>>>> parent of fb19a28 (added visualization template)
-=======
->>>>>>> parent of fb19a28 (added visualization template)
-=======
->>>>>>> parent of fb19a28 (added visualization template)
 if __name__ == "__main__":
     app.run(debug=True)
