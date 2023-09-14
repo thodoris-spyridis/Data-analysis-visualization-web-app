@@ -10,7 +10,7 @@ import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
 import matplotlib
 from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
+
 
 
 app = Flask(__name__)
@@ -58,7 +58,7 @@ def upload_file():
             )
         )  # Find the root directory and save the file after it is validated as secure
         file_path = f"static/files/{file.filename}"
-        data = pd.read_excel(file_path, dtype=object)
+        data = pd.read_excel(file_path)
         data = data.reset_index(drop=True)
         os.remove(file_path)
         file_check = True
@@ -94,6 +94,8 @@ def get_data():
                 result = data[column_name].min()
             elif action == "max":
                 result = data[column_name].max()
+            elif action == "sum":
+                result = data[column_name].sum()
             else:
                 unique_values = {value for value in data[column_name].to_list()}
                 result = len(unique_values)
@@ -115,7 +117,8 @@ def get_data():
 @app.route("/visualize", methods=["POST", "GET"])
 def visualize():
     matplotlib.use("agg")
-    plt.style.use("fivethirtyeight")
+    plt.style.use("seaborn")
+    plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
     plot_file = os.path.join("static", "files", "plot.png")
     if file_check == False:
         return redirect("/no_data")
@@ -124,25 +127,48 @@ def visualize():
     if request.method == "POST":
         x_column = request.form["x-axis"]
         y_column = request.form["y-axis"]
-        x_axis = data[x_column].to_list()
-        y_axis = data[y_column].to_list()
+        x_axis = data[x_column]
+        y_axis = data[y_column]
         plot_type = request.form["plot-type"]
         if plot_type == "Linechart":
             clear_files_folder()
-            plt.plot(x_axis, y_axis)
+            plt.plot(x_axis, y_axis, linewidth=2)
             plt.ylabel(y_column)
             plt.xlabel(x_column)
             plt.title(f"{y_column} by {x_column} {plot_type}")
             plt.tight_layout()
+            plt.legend()
+            plt.savefig(plot_file)
+            plt.close()
+        if plot_type == "Linechart-filled":
+            clear_files_folder()
+            plt.plot(x_axis, y_axis, linewidth=2)
+            plt.ylabel(y_column)
+            plt.xlabel(x_column)
+            plt.title(f"{y_column} by {x_column} {plot_type}")
+            plt.fill_between(x_axis, y_axis, alpha=0.25)
+            plt.tight_layout()
+            plt.legend()
             plt.savefig(plot_file)
             plt.close()
         elif plot_type == "Bar-chart":
             clear_files_folder()
-            plt.bar(x_axis, y_axis)
+            plt.bar(x_axis, y_axis, edgecolor="white", width=10)
             plt.ylabel(y_column)
             plt.xlabel(x_column)
             plt.title(f"{y_column} by {x_column} {plot_type}")
             plt.tight_layout()
+            plt.legend()
+            plt.savefig(plot_file)
+            plt.close()
+        elif plot_type == "Horizontal-bar-chart":
+            clear_files_folder()
+            plt.barh(x_axis, y_axis, edgecolor="white", height=10)
+            plt.ylabel(x_column)
+            plt.xlabel(y_column)
+            plt.title(f"{y_column} by {x_column} {plot_type}")
+            plt.tight_layout()
+            plt.legend()
             plt.savefig(plot_file)
             plt.close()
     return render_template("visualize.html", columns=column_names, plot_pic=plot_file)
