@@ -80,8 +80,12 @@
                 <option value="Linechart-filled">Linechart-filled</option>
                 <option value="Bar-chart">Bar chart</option>
                 <option value="Horizontal-bar-chart">Horizontal-Bar chart</option>
-                <option value="Histogram">Histogram</option>
+                <option value="Histogram">Histogram (select just the x-axis)</option>
+                <option value="Scatter-plot">Scatter-Plot</option>
             </select><br>
+            {% for message in get_flashed_messages() %}
+            <p><strong>{{ message }}</strong></p>
+            {% endfor %}
             <input class="calculate" type="submit" value="Calculate">
         </form>
 

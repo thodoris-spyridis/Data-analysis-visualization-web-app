@@ -163,6 +163,7 @@ svg {
 }
 
 .plot-display {
+  display: flex;
   position: fixed;
   left: 400px;
   bottom: 200px;

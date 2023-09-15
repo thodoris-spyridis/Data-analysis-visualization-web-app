@@ -13,6 +13,7 @@ from matplotlib import pyplot as plt
 
 
 
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "datathodoris1988#"
 app.config["UPLOAD_FOLDER"] = "static/files"
@@ -169,6 +170,23 @@ def visualize():
             plt.title(f"{y_column} by {x_column} {plot_type}")
             plt.tight_layout()
             plt.legend()
+            plt.savefig(plot_file)
+            plt.close()
+        elif plot_type == "Histogram":
+            clear_files_folder()
+            plt.hist(x_axis, bins=5, edgecolor="white")
+            plt.xlabel(x_column)
+            plt.title(f"{x_column} {plot_type}")
+            plt.tight_layout()
+            plt.legend()
+            plt.savefig(plot_file)
+            plt.close()
+        elif plot_type == "Scatter-plot":
+            clear_files_folder()
+            colors = x_axis.to_list()
+            plt.scatter(x_axis, y_axis, c=colors, cmap="Blues", edgecolor="white", linewidths=1, alpha=0.75)
+            plt.title(f"{y_column} by {x_column} {plot_type}")
+            plt.tight_layout()
             plt.savefig(plot_file)
             plt.close()
     return render_template("visualize.html", columns=column_names, plot_pic=plot_file)
