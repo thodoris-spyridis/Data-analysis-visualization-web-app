@@ -30,7 +30,19 @@ body {
 }
 
 .main-block {
+  margin: auto;
   text-align: center;
+}
+
+.registration-form {
+  margin: auto;
+  text-align: center;
+  width: fit-content;
+}
+
+.succes-alert {
+  margin: auto;
+  width: fit-content;
 }
 
 input[type="file"]::file-selector-button {
@@ -126,8 +138,6 @@ svg {
 }
 
 .data-preview {
-  position: fixed;
-  bottom: 80px;
   width: 100%;
 }
 
@@ -163,10 +173,8 @@ svg {
 }
 
 .plot-display {
+  object-fit: cover;
   display: flex;
-  position: fixed;
-  left: 400px;
-  bottom: 200px;
 }
 
 .plot-img {

@@ -1,32 +1,29 @@
 from flask import Flask, render_template, url_for, flash, request, redirect
-from flask_wtf import FlaskForm
-from wtforms import FileField, SubmitField
 import datetime
 from werkzeug.utils import secure_filename
-import os, glob
-from wtforms.validators import InputRequired
-from flask_wtf.file import FileAllowed
+import os
 import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
 import matplotlib
 from matplotlib import pyplot as plt
-
-
+from forms import UploadFileForm, RegistrationForm, LoginForm
 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "datathodoris1988#"
+app.config["SECRET_KEY"] = "a1e649990d4f16f4b7984fd0b64f3880"
 app.config["UPLOAD_FOLDER"] = "static/files"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///file-data.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///user-data.db"
 
 
 db = SQLAlchemy()
 db.init_app(app)
 
 
-class UploadFileForm(FlaskForm):  # upload file form
-    file = FileField("File", validators=[InputRequired(), FileAllowed(["xlsx"], "wrong format!")])
-    submit = SubmitField("Upload File")
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
+
 
 
 today = datetime.date.today()
@@ -48,9 +45,9 @@ def upload_file():
     global file_check
     file_check = False
 
-    form = UploadFileForm()
-    if form.validate_on_submit():
-        file = form.file.data  # Grab the file
+    file_form = UploadFileForm()
+    if file_form.validate_on_submit():
+        file = file_form.file.data  # Grab the file
         file.save(
             os.path.join(
                 os.path.abspath(os.path.dirname(__file__)),
@@ -63,10 +60,26 @@ def upload_file():
         data = data.reset_index(drop=True)
         os.remove(file_path)
         file_check = True
-        flash(f"File {file.filename} has been uploaded")
+        flash(f"File {file.filename} has been uploaded", "success")
     else:
         flash("No file")
-    return render_template("upload.html", year=current_year, form=form)
+    return render_template("upload.html", year=current_year, form=file_form)
+
+
+@app.route("/register", methods=["POST", "GET"])
+def register():
+    register_form = RegistrationForm()
+    if register_form.validate_on_submit():
+        flash(f"Account created for {register_form.username.data}.", "success")
+        return redirect(url_for("upload_file"))
+    return render_template("register.html", year=current_year, form=register_form)
+
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    login_form = LoginForm()
+    return render_template("login.html", year=current_year, form=login_form)
+
 
 
 @app.route("/no_data", methods=["POST", "GET"])
@@ -78,7 +91,7 @@ def no_data():
 @app.route("/data", methods=["POST", "GET"])
 def get_data():
     if file_check == False:
-        return redirect("/no_data")
+        return redirect(url_for("no_data"))
     else:
         display_rows = data[0:10]
         column_names = display_rows.columns
@@ -122,7 +135,7 @@ def visualize():
     plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
     plot_file = os.path.join("static", "files", "plot.png")
     if file_check == False:
-        return redirect("/no_data")
+        return redirect(url_for("no_data"))
     else:
         column_names = data.columns
     if request.method == "POST":

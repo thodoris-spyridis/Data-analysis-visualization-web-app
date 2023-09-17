@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload</title>
+    <title>Register</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,300&family=Libre+Baskerville&family=PT+Serif:wght@700&display=swap" rel="stylesheet">
@@ -40,28 +40,39 @@
   </header>
 
   <article>
-    <div class="main-block justify-content-center">
-      <img class="data-logo" src="static\images\data-logo.png" alt="data logo">
-      <h3 class="upload-text">Upload your excel file to get started!</h3>
-
-      <form method="post" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        {{ form.file() }}
-        {{ form.submit(class_="start-btn") }}
-      </form>
-      <br>
-      <div class="succes-alert">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="alert alert-{{ category }}">
-                {{ message }}
-              </div>
-           {% endfor %}
-          {% endif %}
-        {% endwith %}
-      </div>
+    <div class="registration-form">
+        <form class="register-form align-content-center" method="post" action="#">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Register</legend>
+                <div class="form-group">
+                    {{ form.username.label(class="form-control-label") }}
+                    {{ form.username(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {{ form.email(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-control-label") }}
+                    {{ form.password(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label(class="form-control-label") }}
+                    {{ form.confirm_password(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.sign_up(class="start-btn") }}
+                </div>
+            </fieldset>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already have an account? <a class="ml-2" href="{{ url_for('login') }}">Sign in</a>
+            </small>
+        </div>
     </div>
+
   </article>
 
   <div class="container justify-content-center position-static">
