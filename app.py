@@ -28,6 +28,7 @@ class User(db.Model):
 
 today = datetime.date.today()
 current_year = today.year
+footer_message = f"© {current_year} Neapolis Univercity Pafos"
 
 
 def clear_files_folder():
@@ -63,7 +64,7 @@ def upload_file():
         flash(f"File {file.filename} has been uploaded", "success")
     else:
         flash("No file")
-    return render_template("upload.html", year=current_year, form=file_form)
+    return render_template("upload.html", footter_message=footer_message, form=file_form)
 
 
 @app.route("/register", methods=["POST", "GET"])
@@ -78,14 +79,14 @@ def register():
 @app.route("/login", methods=["POST", "GET"])
 def login():
     login_form = LoginForm()
-    return render_template("login.html", year=current_year, form=login_form)
+    return render_template("login.html", footter_message=footer_message, form=login_form)
 
 
 
 @app.route("/no_data", methods=["POST", "GET"])
 def no_data():
     flash("No data available!")
-    return render_template("no_data.html")
+    return render_template("no_data.html", footter_message=footer_message)
 
 
 @app.route("/data", methods=["POST", "GET"])
@@ -119,7 +120,7 @@ def get_data():
             flash(f"{action}: {result}")
     return render_template(
         "data.html",
-        year=current_year,
+        footter_message=footer_message,
         preview=display_rows,
         columns=column_names,
         all_data=data,
@@ -151,7 +152,6 @@ def visualize():
             plt.xlabel(x_column)
             plt.title(f"{y_column} by {x_column} {plot_type}")
             plt.tight_layout()
-            plt.legend()
             plt.savefig(plot_file)
             plt.close()
         if plot_type == "Linechart-filled":
@@ -202,7 +202,7 @@ def visualize():
             plt.tight_layout()
             plt.savefig(plot_file)
             plt.close()
-    return render_template("visualize.html", columns=column_names, plot_pic=plot_file)
+    return render_template("visualize.html", columns=column_names, plot_pic=plot_file, footter_message=footer_message)
 
 
 if __name__ == "__main__":
