@@ -56,7 +56,7 @@ def upload_file():
                 secure_filename(file.filename),
             )
         )  # Find the root directory and save the file after it is validated as secure
-        file_path = f"static/files/{file.filename}"
+        file_path = f"static/files/{file.filename}".replace(" ", "_")
         data = pd.read_excel(file_path)
         data = data.reset_index(drop=True)
         os.remove(file_path)
@@ -73,7 +73,7 @@ def register():
     if register_form.validate_on_submit():
         flash(f"Account created for {register_form.username.data}.", "success")
         return redirect(url_for("upload_file"))
-    return render_template("register.html", year=current_year, form=register_form)
+    return render_template("register.html", footter_message=footer_message, form=register_form)
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -152,6 +152,7 @@ def visualize():
             plt.xlabel(x_column)
             plt.title(f"{y_column} by {x_column} {plot_type}")
             plt.tight_layout()
+            plt.legend(fontsize=5)
             plt.savefig(plot_file)
             plt.close()
         if plot_type == "Linechart-filled":
@@ -162,7 +163,7 @@ def visualize():
             plt.title(f"{y_column} by {x_column} {plot_type}")
             plt.fill_between(x_axis, y_axis, alpha=0.25)
             plt.tight_layout()
-            plt.legend()
+            plt.legend(fontsize=5)
             plt.savefig(plot_file)
             plt.close()
         elif plot_type == "Bar-chart":
@@ -172,7 +173,7 @@ def visualize():
             plt.xlabel(x_column)
             plt.title(f"{y_column} by {x_column} {plot_type}")
             plt.tight_layout()
-            plt.legend()
+            plt.legend(fontsize=5)
             plt.savefig(plot_file)
             plt.close()
         elif plot_type == "Horizontal-bar-chart":
@@ -182,7 +183,7 @@ def visualize():
             plt.xlabel(y_column)
             plt.title(f"{y_column} by {x_column} {plot_type}")
             plt.tight_layout()
-            plt.legend()
+            plt.legend(fontsize=5)
             plt.savefig(plot_file)
             plt.close()
         elif plot_type == "Histogram":
@@ -191,7 +192,7 @@ def visualize():
             plt.xlabel(x_column)
             plt.title(f"{x_column} {plot_type}")
             plt.tight_layout()
-            plt.legend()
+            plt.legend(fontsize=5)
             plt.savefig(plot_file)
             plt.close()
         elif plot_type == "Scatter-plot":
