@@ -86,11 +86,15 @@
             {% for message in get_flashed_messages() %}
             <p><strong>{{ message }}</strong></p>
             {% endfor %}
-            <input class="calculate" type="submit" value="Calculate">
+            <input class="calculate" type="submit" value="Create">
         </form>
 
         <div class="plot-display">
-            <img class="plot-img" src="{{ plot_pic }}" alt="plot">
+            {% if img_check == True %}
+                <img class="plot-img" src="{{ plot_pic }}" alt="plot">
+            {% else %}
+                <h3 class="plot-text">Select a plot to Display</h3>    
+            {% endif %}
         </div>
 
     </article>

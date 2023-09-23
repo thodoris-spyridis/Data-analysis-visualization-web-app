@@ -3,7 +3,6 @@ import datetime
 from werkzeug.utils import secure_filename
 import os
 import pandas as pd
-from flask_sqlalchemy import SQLAlchemy
 import matplotlib
 from matplotlib import pyplot as plt
 from forms import UploadFileForm, RegistrationForm, LoginForm
@@ -13,17 +12,6 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "a1e649990d4f16f4b7984fd0b64f3880"
 app.config["UPLOAD_FOLDER"] = "static/files"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///user-data.db"
-
-
-db = SQLAlchemy()
-db.init_app(app)
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
-
 
 
 today = datetime.date.today()
@@ -94,8 +82,7 @@ def get_data():
     if file_check == False:
         return redirect(url_for("no_data"))
     else:
-        display_rows = data[0:10]
-        column_names = display_rows.columns
+        column_names = data.columns
         row_count = data.shape[0]
         column_count = data.shape[1]
     if request.method == "POST":
@@ -121,7 +108,7 @@ def get_data():
     return render_template(
         "data.html",
         footter_message=footer_message,
-        preview=display_rows,
+        preview=data,
         columns=column_names,
         all_data=data,
         number_of_rows=row_count,
@@ -134,7 +121,8 @@ def visualize():
     matplotlib.use("agg")
     plt.style.use("seaborn")
     plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
-    plot_file = os.path.join("static", "files", "plot.png")
+    plot_file = os.path.join("static", "plots", "plot.png")
+    img_check = False
     if file_check == False:
         return redirect(url_for("no_data"))
     else:
@@ -203,7 +191,8 @@ def visualize():
             plt.tight_layout()
             plt.savefig(plot_file)
             plt.close()
-    return render_template("visualize.html", columns=column_names, plot_pic=plot_file, footter_message=footer_message)
+        img_check = True
+    return render_template("visualize.html", columns=column_names, plot_pic=plot_file, footter_message=footer_message, img_check=img_check)
 
 
 if __name__ == "__main__":

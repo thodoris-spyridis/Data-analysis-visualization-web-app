@@ -45,6 +45,10 @@ body {
   width: fit-content;
 }
 
+div.inline-options { float:left; }
+
+.clearBoth { clear:both; }
+
 input[type="file"]::file-selector-button {
   background-color: #34495e;
   font-weight: bold;
@@ -150,8 +154,8 @@ svg {
   background-color: #34495e;
   border-radius: 10px;
   text-align: center;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 150px;
   padding-top: 0px;
   padding-bottom: 0px;
@@ -179,4 +183,17 @@ svg {
 
 .plot-img {
   background-color: #e4f1fe;
+}
+
+
+.calculate-line {
+  margin-left: 5px;
+}
+
+#ml-functions {
+  margin-left: 5px;
+}
+
+#ml-functions-label {
+  margin-left: 15px;
 }
