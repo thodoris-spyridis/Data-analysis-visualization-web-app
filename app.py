@@ -6,6 +6,7 @@ import pandas as pd
 import matplotlib
 from matplotlib import pyplot as plt
 from forms import UploadFileForm, RegistrationForm, LoginForm
+import numpy as np
 
 
 app = Flask(__name__)
@@ -130,8 +131,8 @@ def visualize():
     if request.method == "POST":
         x_column = request.form["x-axis"]
         y_column = request.form["y-axis"]
-        x_axis = data[x_column]
-        y_axis = data[y_column]
+        x_axis = np.array(data[x_column])
+        y_axis = np.array(data[y_column])
         plot_type = request.form["plot-type"]
         if plot_type == "Linechart":
             clear_files_folder()
