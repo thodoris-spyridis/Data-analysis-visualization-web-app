@@ -46,56 +46,16 @@
 
     <article>
 
-        <form class="data-form" method="post">
-            <label class="selection-label" for="column-name" style="font-size: large;">
-                <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
-                </svg>
-                x-axis
-            </label><br>
-            <select class="selection" name="x-axis" id="column-name">
-                {% for column in columns %}
-                <option value="{{ column }}">{{ column }}</option>
-                {% endfor %}
-            </select><br>
-            <label class="selection-label" for="column-name" style="font-size: large;">
-                <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-up" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
-                </svg>
-                y-axis
-            </label><br>
-            <select class="selection" name="y-axis" id="column-name">
-                {% for column in columns %}
-                <option value="{{ column }}">{{ column }}</option>
-                {% endfor %}
-            </select><br>
-            <br>
-            <label class="selection-label" for="plot-type" style="font-size: large;">Select chart</label><br>
-            <select class="selection" name="plot-type" id="plot-type">
-                <option value="Linechart">Linechart</option>
-                <option value="Linechart-filled">Linechart-filled</option>
-                <option value="Bar-chart">Bar chart</option>
-                <option value="Horizontal-bar-chart">Horizontal-Bar chart</option>
-                <option value="Histogram">Histogram (select just the x-axis)</option>
-                <option value="Scatter-plot">Scatter-Plot</option>
-            </select><br>
-            {% for message in get_flashed_messages() %}
-            <p><strong>{{ message }}</strong></p>
-            {% endfor %}
-            <input class="calculate" type="submit" value="Create">
-        </form>
-
-        <div class="plot-display">
-            <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
-                type="module"></script>
-            <dotlottie-player src="https://lottie.host/2827cc74-acc4-450f-a9a3-46221312f267/xvuFGE1vN3.json"
-                background="transparent" speed="1" style="width: 300px; height: 300px;" loop
-                autoplay></dotlottie-player>
+        <div class="plot-pic" id="plot-pic">
+            <img class="plot-img" src="{{ plot_img }}" alt="plot">
         </div>
+        <a class="download-button" href="{{ plot_img }}" role="button" download="plot.png">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+            </svg>
+            Download
+        </a>
 
     </article>
 

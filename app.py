@@ -110,13 +110,18 @@ def get_data():
     )
 
 
+@app.route("/plot", methods=["POST", "GET"])
+def plot():
+    plot_pic = os.path.join("static", "plots", "plot.png")
+    return render_template("plot.html", plot_img=plot_pic)
+
+
 @app.route("/visualize", methods=["POST", "GET"])
 def visualize():
     matplotlib.use("agg")
     plt.style.use("ggplot")
     plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
     plot_file = os.path.join("static", "plots", "plot.png")
-    img_check = False
     if file_check == False:
         return redirect(url_for("no_data"))
     else:
@@ -130,23 +135,28 @@ def visualize():
         if plot_type == "Linechart":
             clear_files_folder()
             linechart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            return redirect(url_for("plot"))
         if plot_type == "Linechart-filled":
             clear_files_folder()
             linechart_filled(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            return redirect(url_for("plot"))
         elif plot_type == "Bar-chart":
             clear_files_folder()
             bar_chart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            return redirect(url_for("plot"))
         elif plot_type == "Horizontal-bar-chart":
             clear_files_folder()
             horizontal_bar_chart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            return redirect(url_for("plot"))
         elif plot_type == "Histogram":
             clear_files_folder()
             histogram(x_axis, x_column,plot_type, plot_file)
+            return redirect(url_for("plot"))
         elif plot_type == "Scatter-plot":
             clear_files_folder()
             scatter_plot(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
-        img_check = True
-    return render_template("visualize.html", columns=column_names, plot_pic=plot_file, footter_message=footer_message, img_check=img_check)
+            return redirect(url_for("plot"))
+    return render_template("visualize.html", columns=column_names, footter_message=footer_message)
 
 
 if __name__ == "__main__":

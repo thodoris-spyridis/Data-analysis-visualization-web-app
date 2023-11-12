@@ -185,13 +185,24 @@ svg {
   display: flex;
 }
 
-.plot-img {
-  background-color: #e4f1fe;
-}
-
 
 .calculate-line {
   margin-left: 5px;
+}
+
+.download-button {
+  background-color: #34495e;
+  font-weight: bold;
+  color: white;
+  padding: 0.55rem 0.66rem;
+  border: none;
+  border-radius: 8px;
+  margin-left:50px;
+}
+
+.download-button:hover {
+  background-color: #526980;
+  cursor: pointer;
 }
 
 #ml-functions {
@@ -201,3 +212,4 @@ svg {
 #ml-functions-label {
   margin-left: 15px;
 }
+
