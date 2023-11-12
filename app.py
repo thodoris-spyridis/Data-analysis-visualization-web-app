@@ -7,6 +7,7 @@ import matplotlib
 from matplotlib import pyplot as plt
 from forms import UploadFileForm, RegistrationForm, LoginForm
 import numpy as np
+from functions import clear_files_folder, linechart, linechart_filled, bar_chart, horizontal_bar_chart, histogram, scatter_plot
 
 
 app = Flask(__name__)
@@ -19,14 +20,6 @@ today = datetime.date.today()
 current_year = today.year
 footer_message = f"© {current_year} Neapolis Univercity Pafos"
 
-
-def clear_files_folder():
-    '''clears the files folder so we have on plot to display every time it runs'''
-    dir = r"static\files"
-    if len(list(os.scandir(dir))) != 0:
-        os.remove(r"static\files\plot.png")
-    else:
-        return
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -120,7 +113,7 @@ def get_data():
 @app.route("/visualize", methods=["POST", "GET"])
 def visualize():
     matplotlib.use("agg")
-    plt.style.use("seaborn")
+    plt.style.use("ggplot")
     plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
     plot_file = os.path.join("static", "plots", "plot.png")
     img_check = False
@@ -131,67 +124,27 @@ def visualize():
     if request.method == "POST":
         x_column = request.form["x-axis"]
         y_column = request.form["y-axis"]
-        x_axis = np.array(data[x_column])
-        y_axis = np.array(data[y_column])
+        x_axis = data[x_column].to_list()
+        y_axis = data[y_column].to_list()
         plot_type = request.form["plot-type"]
         if plot_type == "Linechart":
             clear_files_folder()
-            plt.plot(x_axis, y_axis, linewidth=2)
-            plt.ylabel(y_column)
-            plt.xlabel(x_column)
-            plt.title(f"{y_column} by {x_column} {plot_type}")
-            plt.tight_layout()
-            plt.legend(fontsize=5)
-            plt.savefig(plot_file)
-            plt.close()
+            linechart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
         if plot_type == "Linechart-filled":
             clear_files_folder()
-            plt.plot(x_axis, y_axis, linewidth=2)
-            plt.ylabel(y_column)
-            plt.xlabel(x_column)
-            plt.title(f"{y_column} by {x_column} {plot_type}")
-            plt.fill_between(x_axis, y_axis, alpha=0.25)
-            plt.tight_layout()
-            plt.legend(fontsize=5)
-            plt.savefig(plot_file)
-            plt.close()
+            linechart_filled(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
         elif plot_type == "Bar-chart":
             clear_files_folder()
-            plt.bar(x_axis, y_axis, edgecolor="white", width=10)
-            plt.ylabel(y_column)
-            plt.xlabel(x_column)
-            plt.title(f"{y_column} by {x_column} {plot_type}")
-            plt.tight_layout()
-            plt.legend(fontsize=5)
-            plt.savefig(plot_file)
-            plt.close()
+            bar_chart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
         elif plot_type == "Horizontal-bar-chart":
             clear_files_folder()
-            plt.barh(x_axis, y_axis, edgecolor="white", height=10)
-            plt.ylabel(x_column)
-            plt.xlabel(y_column)
-            plt.title(f"{y_column} by {x_column} {plot_type}")
-            plt.tight_layout()
-            plt.legend(fontsize=5)
-            plt.savefig(plot_file)
-            plt.close()
+            horizontal_bar_chart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
         elif plot_type == "Histogram":
             clear_files_folder()
-            plt.hist(x_axis, bins=5, edgecolor="white")
-            plt.xlabel(x_column)
-            plt.title(f"{x_column} {plot_type}")
-            plt.tight_layout()
-            plt.legend(fontsize=5)
-            plt.savefig(plot_file)
-            plt.close()
+            histogram(x_axis, x_column,plot_type, plot_file)
         elif plot_type == "Scatter-plot":
             clear_files_folder()
-            colors = x_axis.to_list()
-            plt.scatter(x_axis, y_axis, c=colors, cmap="Blues", edgecolor="white", linewidths=1, alpha=0.75)
-            plt.title(f"{y_column} by {x_column} {plot_type}")
-            plt.tight_layout()
-            plt.savefig(plot_file)
-            plt.close()
+            scatter_plot(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
         img_check = True
     return render_template("visualize.html", columns=column_names, plot_pic=plot_file, footter_message=footer_message, img_check=img_check)
 
