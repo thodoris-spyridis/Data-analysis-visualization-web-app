@@ -30,6 +30,7 @@
             <a class="nav-link active" href="{{ url_for('upload_file') }}">Upload File</a>
             <a class="nav-link active" href="{{ url_for('get_data') }}">Get Data</a>
             <a class="nav-link active" href="{{ url_for('visualize') }}">Visualize</a>
+            <a class="nav-link active" href="{{ url_for('linear_regression') }}">Linear Regression</a>
           </div>
         </div>
       </div>
@@ -51,24 +52,13 @@
           {% endfor %}
         </select><br>
         <div class="inline-options">
-        <label class="selection-label" for="action" style="font-size: large;">Select action</label><br>
+        <label class="selection-label" for="action" style="font-size: large;">Select calculation</label><br>
         <select class="selection" name="action" id="action">
           <option value="sum">Total</option>
           <option value="average">Average</option>
           <option value="min">Minimum</option>
           <option value="max">Maximum</option>
           <option value="unique-count">Count unique values</option>     
-        </select><br>
-        </div>
-        <div class="inline-options">
-        <label class="selection-label" id="ml-functions-label" for="ml-functions" style="font-size: large;">ML Functions</label><br>
-        <select class="selection" name="ml-functions" id="ml-functions">
-          <option value="option-1">option-1</option>
-          <option value="option-2">option-2</option>
-          <option value="option-3">option-3</option>
-          <option value="option-4">option-4</option>
-          <option value="option-5">option-5</option>     
-          <option value="option-6">option-6</option>     
         </select><br>
         </div>
         <br class="clearBoth">

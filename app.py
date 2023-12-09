@@ -21,13 +21,12 @@ current_year = today.year
 footer_message = f"© {current_year} Neapolis Univercity Pafos"
 
 
-
+file_check = False
 @app.route("/", methods=["POST", "GET"])
 def upload_file():
     global data
     global file_check
-    file_check = False
-
+    
     file_form = UploadFileForm()
     if file_form.validate_on_submit():
         file = file_form.file.data  # Grab the file
@@ -45,7 +44,7 @@ def upload_file():
         file_check = True
         flash(f"File {file.filename} has been uploaded", "success")
     else:
-        flash("No file")
+        flash("Only excel files are supported")
     return render_template("upload.html", footter_message=footer_message, form=file_form)
 
 
@@ -157,6 +156,23 @@ def visualize():
             scatter_plot(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
             return redirect(url_for("plot"))
     return render_template("visualize.html", columns=column_names, footter_message=footer_message)
+
+
+@app.route("/linear_regression", methods=["POST", "GET"])
+def linear_regression():
+    
+    if file_check == False:
+        return redirect(url_for("no_data"))
+    else:
+        column_names = data.columns[:-1]
+        x = data.iloc[:, :-1].values
+        y = data.iloc[:, -1].values
+
+    return render_template("linear_regression.html", columns=column_names,  footter_message=footer_message)
+
+
+
+
 
 
 if __name__ == "__main__":
