@@ -10,7 +10,6 @@ def clear_files_folder():
         return
     
 
-
 def linechart(x_axis, y_axis, y_column, x_column,plot_type, plot_file):
     clear_files_folder()
     plt.plot(x_axis, y_axis, linewidth=2)

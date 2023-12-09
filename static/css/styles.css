@@ -149,7 +149,11 @@ svg {
   width: 100%;
 }
 
-.selection-label {
+.centered-label {
+  margin-left: 18px;
+}
+
+.Linear-Regression-Info {
   margin-left: 18px;
 }
 
@@ -190,6 +194,19 @@ svg {
   margin-left: 5px;
 }
 
+.split-percent {
+  color: #34495e;
+  background-color: #e7eaf6;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 150px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+
 .download-button {
   background-color: #34495e;
   font-weight: bold;
@@ -203,6 +220,10 @@ svg {
 .download-button:hover {
   background-color: #526980;
   cursor: pointer;
+}
+
+.Linear-Regression-Title {
+  padding-top: 15px;
 }
 
 #ml-functions {

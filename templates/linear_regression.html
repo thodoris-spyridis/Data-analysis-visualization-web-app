@@ -45,29 +45,41 @@
         </nav>
     </header>
 
-    <article>
+    <article class="main-block">
+
+        <h3 class="Linear-Regression-Title">Linear Regression Model</h3>
+        <br>
+
+        <div class="Linear-Regression-Info">
+            <p>The columns that contain text data (categorical), must be encoded. Otherwise the model will not work properly.<br>
+                If that is the case, select the column and press "Encode".
+            </p>
+        </div>
 
         <form class="data-form" method="post">
             <br>
-            <label class="selection-label" for="categorical-column" style="font-size: large;">Select column</label><br>
+            <label class="categorical-label" for="categorical-column" style="font-size: large;">Select categorical column</label><br>
             <select class="selection" name="categorical-column" id="categorical-column">
                 {% for column in columns %}
                     <option value="{{ column }}">{{ column }}</option>
                 {% endfor %}
             </select><br>
+            <input class="calculate" type="submit" value="Encode">
             {% for message in get_flashed_messages() %}
-            <p><strong>{{ message }}</strong></p>
+                <p><strong>{{ message }}</strong></p>
             {% endfor %}
-            <input class="calculate" type="submit" value="Create">
-        </form>
+        </form><br>
 
-        <div class="plot-display">
-            <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
-                type="module"></script>
-            <dotlottie-player src="https://lottie.host/2827cc74-acc4-450f-a9a3-46221312f267/xvuFGE1vN3.json"
-                background="transparent" speed="1" style="width: 300px; height: 300px;" loop
-                autoplay></dotlottie-player>
+        <div class="Linear-Regression-Info">
+            <p>Incert what percentage of the total dataset will be used for training the model.</p>
         </div>
+
+        <form class="data-form" method="post">
+            <label class="split-percent-label" for="percent-input" style="font-size: large;">Insert split percentage</label><br>
+            <input class="split-percent" name="percent-input" type="number" value="Split percentage"><br>
+            <input class="calculate" type="submit" value="Run Model">
+        </form><br>
+
 
     </article>
 

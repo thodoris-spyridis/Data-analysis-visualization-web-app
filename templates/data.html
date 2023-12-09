@@ -45,14 +45,14 @@
       </ul>
 
       <form class="data-form" method="post">
-        <label class="selection-label" for="column-name" style="font-size: large;">Select column</label><br>
+        <label class="centered-label" for="column-name" style="font-size: large;">Select column</label><br>
         <select class="selection" name="column-name" id="column-name">
           {% for column in columns %}
           <option value="{{ column }}">{{ column }}</option>
           {% endfor %}
         </select><br>
         <div class="inline-options">
-        <label class="selection-label" for="action" style="font-size: large;">Select calculation</label><br>
+        <label class="centered-label" for="action" style="font-size: large;">Select calculation</label><br>
         <select class="selection" name="action" id="action">
           <option value="sum">Total</option>
           <option value="average">Average</option>
