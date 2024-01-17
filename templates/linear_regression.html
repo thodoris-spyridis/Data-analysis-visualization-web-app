@@ -39,7 +39,7 @@
                         <a class="nav-link active" href="{{ url_for('get_data') }}">Get Data</a>
                         <a class="nav-link active" href="{{ url_for('visualize') }}">Visualize</a>
                         <a class="nav-link active" href="{{ url_for('linear_regression') }}">Linear Regression</a>
-                        <a class="nav-link active" href="">Polynomial Regression</a>
+                        <a class="nav-link active" href="{{ url_for('polynomial') }}">Polynomial Regression</a>
                         <a class="nav-link active" href="">Logistic Regression</a>                       
                     </div>
                 </div>
@@ -73,7 +73,7 @@
         </form><br>
 
         <div class="Linear-Regression-Info">
-            <p>Incert what percentage of the total dataset will be used for training the model.</p>
+            <p>The split percentage defines the percentage of the dataset that will be used for testing the trained model.</p>
         </div>
 
         {% for message in get_flashed_messages() %}

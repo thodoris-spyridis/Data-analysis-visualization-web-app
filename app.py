@@ -8,8 +8,11 @@ from matplotlib import pyplot as plt
 from forms import UploadFileForm, RegistrationForm, LoginForm
 import numpy as np
 from functions import clear_files_folder, linechart, linechart_filled, bar_chart, horizontal_bar_chart, histogram, scatter_plot, encode_categorical
-from linear_regression import train_split, linear_regression_train, plot_results
-
+from linear_regression import linear_regression_train, plot_linear
+from polynomial import plot_polynomial, simple_encoding
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
 
 
 app = Flask(__name__)
@@ -173,12 +176,40 @@ def linear_regression():
             column_index = data.columns.get_loc(request.form["categorical-column"])
             x = encode_categorical(x, column_index)
         size = float(request.form["percent-input"]) / 100
-        x_train, x_test, y_train, y_test = train_split(x, y, size)  
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=size, random_state=0)  
         y_pred = linear_regression_train(x_train, y_train, x_test) 
         clear_files_folder()
-        plot_results(column_list, x_test, y_test, y_pred, plot_file) 
+        plot_linear(column_list, x_test, y_test, y_pred, plot_file) 
         return redirect(url_for("plot"))
     return render_template("linear_regression.html", columns=column_names,  footter_message=footer_message)
+
+
+@app.route("/polynomial", methods=["POST", "GET"])
+def polynomial():
+    if file_check == False:
+        return redirect(url_for("no_data"))
+    else:
+        column_names = data.columns[:-1]
+        x = data.iloc[:, 0].values.reshape(-1, 1)
+        y = data.iloc[:, -1].values.reshape(-1, 1)
+    if request.method == "POST":
+        # if request.form["categorical-column"] != "None":
+        #     x = np.array(simple_encoding(list(x)))
+        # size = float(float(request.form["percent-input"]) / 100)
+        degree = int(request.form["degree"])
+        poly_reg = PolynomialFeatures(degree=degree)
+        x_poly = poly_reg.fit_transform(x)[:, -1].reshape(-1, 1)
+        # x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=size, random_state=0)
+        linear_reg = LinearRegression()
+        linear_reg.fit(x_poly, y)
+        y_pred = linear_reg.predict(x_poly)
+        print(x_poly)
+        print(y)
+        print(y_pred)
+        clear_files_folder()
+        plot_polynomial(x_poly, y, y_pred, plot_file, column_names) 
+        return redirect(url_for("plot"))
+    return render_template("polynomial.html", columns=column_names,  footter_message=footer_message)
 
 
 

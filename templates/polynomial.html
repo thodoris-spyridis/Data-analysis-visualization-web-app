@@ -49,56 +49,42 @@
 
     <article class="main-block">
 
+        <h3 class="Linear-Regression-Title">Polynomial Linear Regression Model</h3>
+        <br>
+
+        <div class="Linear-Regression-Info">
+            <p>The columns that contain text data (categorical), must be encoded. Otherwise the model will not work properly.<br>
+                If that is the case, select the column and press "Encode". The dataset must contain 2 columns, features and target values.
+            </p>
+        </div>
+
         <form class="data-form" method="post">
-            <label class="selection-label" for="column-name" style="font-size: large;">
-                <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
-                </svg>
-                x-axis
-            </label><br>
-            <select class="selection" name="x-axis" id="column-name">
+            <br>
+            <label class="categorical-label" for="categorical-column" style="font-size: large;">Select categorical column</label><br>
+            <select class="selection" name="categorical-column" id="categorical-column">
+                <option value="None">None</option>
                 {% for column in columns %}
                     <option value="{{ column }}">{{ column }}</option>
                 {% endfor %}
             </select><br>
-            <label class="selection-label" for="column-name" style="font-size: large;">
-                <svg class="arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-up" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
-                </svg>
-                y-axis
-            </label><br>
-            <select class="selection" name="y-axis" id="column-name">
-                {% for column in columns %}
-                <option value="{{ column }}">{{ column }}</option>
-                {% endfor %}
-            </select><br>
+            <label class="split-percent-label" for="percent-input" style="font-size: large;">Insert split percentage</label><br>
+            <input class="split-percent" name="percent-input" type="number" value="Split percentage"><br>
             <br>
-            <label class="selection-label" for="plot-type" style="font-size: large;">Select chart</label><br>
-            <select class="selection" name="plot-type" id="plot-type">
-                <option value="Linechart">Linechart</option>
-                <option value="Linechart-filled">Linechart-filled</option>
-                <option value="Bar-chart">Bar chart</option>
-                <option value="Horizontal-bar-chart">Horizontal-Bar chart</option>
-                <option value="Histogram">Histogram (select just the x-axis)</option>
-                <option value="Scatter-plot">Scatter-Plot</option>
-            </select><br>
-            {% for message in get_flashed_messages() %}
-            <p><strong>{{ message }}</strong></p>
-            {% endfor %}
-            <input class="calculate" type="submit" value="Create">
-        </form>
+            <label class="degree-label" for="degree" style="font-size: large;">Insert maximum degree</label><br>
+            <input class="degree" name="degree" type="number" value="Degree"><br>
+            <input class="calculate" type="submit" value="Run Model">
+        </form><br>
 
-        <div class="plot-display">
-            <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
-                type="module"></script>
-            <dotlottie-player src="https://lottie.host/2827cc74-acc4-450f-a9a3-46221312f267/xvuFGE1vN3.json"
-                background="transparent" speed="1" style="width: 300px; height: 300px;" loop
-                autoplay></dotlottie-player>
+        <div class="Linear-Regression-Info">
+            <p> 
+              The split percentage defines the percentage of the dataset that will be used for testing the trained model.<br>
+              The degree defines the maximum power that our features will reach in our polynomial function
+            </p>
         </div>
+
+        {% for message in get_flashed_messages() %}
+         <p><strong>{{ message }}</strong></p>
+        {% endfor %}
 
     </article>
 

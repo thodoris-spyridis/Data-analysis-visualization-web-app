@@ -3,14 +3,16 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
 
 def clear_files_folder():
-    '''clears the files folder so we have on plot to display every time it runs'''
+    '''clears the files folder so we always have one plot to display'''
     dir = r"static\files"
     if len(list(os.scandir(dir))) != 0:
-        os.remove(r"static\files\plot.png")
+        os.remove(r"static\plots\plot.png")
     else:
         return
+
 
 # - Encode categorical data
 def encode_categorical(x, column_index):

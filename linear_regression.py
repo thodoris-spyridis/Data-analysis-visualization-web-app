@@ -1,16 +1,7 @@
-from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import explained_variance_score, mean_absolute_error, mean_squared_error
 import matplotlib.pyplot as plt
 
-
-# - Split the dataset to train and test data with a test size of 20% of the initial dataset
-def train_split(x, y, size):
-    '''
-    Splits the dataset to training and test data
-    '''
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=size, random_state=0)
-    return x_train, x_test, y_train, y_test
 
 # - Fit, train and test the model 
 def linear_regression_train(x_train, y_train, x_test):
@@ -24,7 +15,7 @@ def linear_regression_train(x_train, y_train, x_test):
     return y_pred   
 
 #plot the test results vs the target
-def plot_results(column_list, x_test, y_test, y_pred, plot_file):
+def plot_linear(column_list, x_test, y_test, y_pred, plot_file):
     var_score = round(explained_variance_score(y_test, y_pred), 3)
     mean_score = round(mean_absolute_error(y_test, y_pred), 3)
     mean_sqr_score = round(mean_squared_error(y_test, y_pred), 3)
