@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, flash, request, redirect
+from flask import Flask, render_template, url_for, flash, request, redirect, session
 import datetime
 from werkzeug.utils import secure_filename
 import os
@@ -7,7 +7,9 @@ import matplotlib
 from matplotlib import pyplot as plt
 from forms import UploadFileForm, RegistrationForm, LoginForm
 import numpy as np
-from functions import clear_files_folder, linechart, linechart_filled, bar_chart, horizontal_bar_chart, histogram, scatter_plot
+from functions import clear_files_folder, linechart, linechart_filled, bar_chart, horizontal_bar_chart, histogram, scatter_plot, encode_categorical
+from linear_regression import train_split, linear_regression_train, plot_results
+
 
 
 app = Flask(__name__)
@@ -19,6 +21,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///user-data.db"
 today = datetime.date.today()
 current_year = today.year
 footer_message = f"© {current_year} Neapolis Univercity Pafos"
+matplotlib.use("agg")
+plt.style.use("ggplot")
+plot_file = os.path.join("static", "plots", "plot.png")
 
 
 file_check = False
@@ -61,7 +66,6 @@ def register():
 def login():
     login_form = LoginForm()
     return render_template("login.html", footter_message=footer_message, form=login_form)
-
 
 
 @app.route("/no_data", methods=["POST", "GET"])
@@ -117,10 +121,7 @@ def plot():
 
 @app.route("/visualize", methods=["POST", "GET"])
 def visualize():
-    matplotlib.use("agg")
-    plt.style.use("ggplot")
     plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
-    plot_file = os.path.join("static", "plots", "plot.png")
     if file_check == False:
         return redirect(url_for("no_data"))
     else:
@@ -133,19 +134,19 @@ def visualize():
         plot_type = request.form["plot-type"]
         if plot_type == "Linechart":
             clear_files_folder()
-            linechart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            linechart(x_axis, y_axis, y_column, x_column, plot_type, plot_file)
             return redirect(url_for("plot"))
         if plot_type == "Linechart-filled":
             clear_files_folder()
-            linechart_filled(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            linechart_filled(x_axis, y_axis, y_column, x_column, plot_type, plot_file)
             return redirect(url_for("plot"))
         elif plot_type == "Bar-chart":
             clear_files_folder()
-            bar_chart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            bar_chart(x_axis, y_axis, y_column, x_column, plot_type, plot_file)
             return redirect(url_for("plot"))
         elif plot_type == "Horizontal-bar-chart":
             clear_files_folder()
-            horizontal_bar_chart(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            horizontal_bar_chart(x_axis, y_axis, y_column, x_column, plot_type, plot_file)
             return redirect(url_for("plot"))
         elif plot_type == "Histogram":
             clear_files_folder()
@@ -153,21 +154,30 @@ def visualize():
             return redirect(url_for("plot"))
         elif plot_type == "Scatter-plot":
             clear_files_folder()
-            scatter_plot(x_axis, y_axis, y_column, x_column,plot_type, plot_file)
+            scatter_plot(x_axis, y_axis, y_column, x_column, plot_type, plot_file)
             return redirect(url_for("plot"))
     return render_template("visualize.html", columns=column_names, footter_message=footer_message)
 
 
 @app.route("/linear_regression", methods=["POST", "GET"])
 def linear_regression():
-    
     if file_check == False:
         return redirect(url_for("no_data"))
     else:
         column_names = data.columns[:-1]
+        column_list = list(column_names)
         x = data.iloc[:, :-1].values
         y = data.iloc[:, -1].values
-
+    if request.method == "POST":
+        if request.form["categorical-column"] != "None":
+            column_index = data.columns.get_loc(request.form["categorical-column"])
+            x = encode_categorical(x, column_index)
+        size = float(request.form["percent-input"]) / 100
+        x_train, x_test, y_train, y_test = train_split(x, y, size)  
+        y_pred = linear_regression_train(x_train, y_train, x_test) 
+        clear_files_folder()
+        plot_results(column_list, x_test, y_test, y_pred, plot_file) 
+        return redirect(url_for("plot"))
     return render_template("linear_regression.html", columns=column_names,  footter_message=footer_message)
 
 

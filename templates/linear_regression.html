@@ -62,26 +62,23 @@
             <br>
             <label class="categorical-label" for="categorical-column" style="font-size: large;">Select categorical column</label><br>
             <select class="selection" name="categorical-column" id="categorical-column">
+                <option value="None">None</option>
                 {% for column in columns %}
                     <option value="{{ column }}">{{ column }}</option>
                 {% endfor %}
             </select><br>
-            <input class="calculate" type="submit" value="Encode">
-            {% for message in get_flashed_messages() %}
-                <p><strong>{{ message }}</strong></p>
-            {% endfor %}
+            <label class="split-percent-label" for="percent-input" style="font-size: large;">Insert split percentage</label><br>
+            <input class="split-percent" name="percent-input" type="number" value="Split percentage"><br>
+            <input class="calculate" type="submit" value="Run Model">
         </form><br>
 
         <div class="Linear-Regression-Info">
             <p>Incert what percentage of the total dataset will be used for training the model.</p>
         </div>
 
-        <form class="data-form" method="post">
-            <label class="split-percent-label" for="percent-input" style="font-size: large;">Insert split percentage</label><br>
-            <input class="split-percent" name="percent-input" type="number" value="Split percentage"><br>
-            <input class="calculate" type="submit" value="Run Model">
-        </form><br>
-
+        {% for message in get_flashed_messages() %}
+         <p><strong>{{ message }}</strong></p>
+        {% endfor %}
 
     </article>
 

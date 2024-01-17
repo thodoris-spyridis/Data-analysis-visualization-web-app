@@ -1,5 +1,8 @@
 import os
+import numpy as np
 from matplotlib import pyplot as plt
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
 
 def clear_files_folder():
     '''clears the files folder so we have on plot to display every time it runs'''
@@ -8,7 +11,16 @@ def clear_files_folder():
         os.remove(r"static\files\plot.png")
     else:
         return
-    
+
+# - Encode categorical data
+def encode_categorical(x, column_index):
+    '''
+    Encodes the categorical data
+    '''
+    ct = ColumnTransformer(transformers=[("encoder", OneHotEncoder(), [column_index])], remainder="passthrough")
+    x_new = np.array(ct.fit_transform(x))
+    return x_new
+
 
 def linechart(x_axis, y_axis, y_column, x_column,plot_type, plot_file):
     clear_files_folder()
