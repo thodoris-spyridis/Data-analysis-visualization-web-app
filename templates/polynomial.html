@@ -67,8 +67,6 @@
                     <option value="{{ column }}">{{ column }}</option>
                 {% endfor %}
             </select><br>
-            <label class="split-percent-label" for="percent-input" style="font-size: large;">Insert split percentage</label><br>
-            <input class="split-percent" name="percent-input" type="number" value="Split percentage"><br>
             <br>
             <label class="degree-label" for="degree" style="font-size: large;">Insert maximum degree</label><br>
             <input class="degree" name="degree" type="number" value="Degree"><br>
@@ -77,7 +75,6 @@
 
         <div class="Linear-Regression-Info">
             <p> 
-              The split percentage defines the percentage of the dataset that will be used for testing the trained model.<br>
               The degree defines the maximum power that our features will reach in our polynomial function
             </p>
         </div>

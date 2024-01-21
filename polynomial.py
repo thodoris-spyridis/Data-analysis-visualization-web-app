@@ -10,13 +10,13 @@ def simple_encoding(lst):
     return new_lst
 
 
-def plot_polynomial(x_test, y_test, y_pred, plot_file, column_names):
-    var_score = round(explained_variance_score(y_test, y_pred), 3)
-    mean_score = round(mean_absolute_error(y_test, y_pred), 3)
-    mean_sqr_score = round(mean_squared_error(y_test, y_pred), 3)
-    r2 = round(r2_score(y_test, y_pred), 3)
-    plt.scatter(x_test, y_test, color="blue")
-    plt.plot(x_test, y_pred, color="red", linewidth=2)
+def plot_polynomial(x, y, y_pred, plot_file, column_names):
+    var_score = round(explained_variance_score(y, y_pred), 3)
+    mean_score = round(mean_absolute_error(y, y_pred), 3)
+    mean_sqr_score = round(mean_squared_error(y, y_pred), 3)
+    r2 = round(r2_score(y, y_pred), 3)
+    plt.scatter(x, y, color="blue", marker="x")
+    plt.plot(x, y_pred, color="red", linewidth=2)
     plt.title(f"Explained variance score = {var_score}, Mean absolute score = {mean_score}, Mean squared error = {mean_sqr_score}, R² Score = {r2}", fontsize="small")
     plt.xlabel(f"{column_names[0]}")
     plt.ylabel(f"{column_names[-1]}")

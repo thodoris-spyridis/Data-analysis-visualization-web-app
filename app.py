@@ -190,24 +190,21 @@ def polynomial():
         return redirect(url_for("no_data"))
     else:
         column_names = data.columns[:-1]
-        x = data.iloc[:, 0].values.reshape(-1, 1)
-        y = data.iloc[:, -1].values.reshape(-1, 1)
+        x = data.iloc[:, -2:-1].values
+        y = data.iloc[:, -1].values
     if request.method == "POST":
-        # if request.form["categorical-column"] != "None":
-        #     x = np.array(simple_encoding(list(x)))
-        # size = float(float(request.form["percent-input"]) / 100)
+        if request.form["categorical-column"] != "None":
+            x = np.array(simple_encoding(list(x)))
         degree = int(request.form["degree"])
         poly_reg = PolynomialFeatures(degree=degree)
-        x_poly = poly_reg.fit_transform(x)[:, -1].reshape(-1, 1)
-        # x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=size, random_state=0)
-        linear_reg = LinearRegression()
-        linear_reg.fit(x_poly, y)
-        y_pred = linear_reg.predict(x_poly)
-        print(x_poly)
-        print(y)
-        print(y_pred)
+        x_poly = poly_reg.fit_transform(x)
+        linear_reg_poly = LinearRegression()
+        linear_reg_poly.fit(x_poly, y)
+        y_pred_poly = linear_reg_poly.predict(x_poly)
+        print(x.shape, y.shape, y_pred_poly.shape)
         clear_files_folder()
-        plot_polynomial(x_poly, y, y_pred, plot_file, column_names) 
+        plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
+        plot_polynomial(x, y, y_pred_poly, plot_file, column_names) 
         return redirect(url_for("plot"))
     return render_template("polynomial.html", columns=column_names,  footter_message=footer_message)
 
