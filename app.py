@@ -8,18 +8,16 @@ from matplotlib import pyplot as plt
 from forms import UploadFileForm, RegistrationForm, LoginForm
 import numpy as np
 from functions import clear_files_folder, linechart, linechart_filled, bar_chart, horizontal_bar_chart, histogram, scatter_plot, encode_categorical
-from linear_regression import linear_regression_train, plot_linear
-from polynomial import plot_polynomial, simple_encoding
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
-from sklearn import tree
+from linear_regression import linear_regression_train, plot_linear
+from polynomial import plot_polynomial, simple_encoding
 from svr import plot_svr
 from decision_tree import tree_graph
-
 
 
 app = Flask(__name__)
@@ -247,6 +245,9 @@ def decision_tree():
         x = data.iloc[:, :-1].values
         y = data.iloc[:, -1].values
     if request.method == "POST":
+        if request.form["categorical-column"] != "None":
+            column_index = data.columns.get_loc(request.form["categorical-column"])
+            x = encode_categorical(x, column_index)
         tree_reg = DecisionTreeRegressor(max_depth=3, random_state=1234)
         tree_reg.fit(x, y)      
         feature_names=list(data.columns)[:-1] 
@@ -254,7 +255,6 @@ def decision_tree():
         tree_graph(tree_reg, plot_file, feature_names)
         return redirect(url_for("plot"))
     return render_template("decision_tree.html", columns=column_names,  footter_message=footer_message)
-
 
 
 if __name__ == "__main__":
