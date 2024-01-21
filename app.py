@@ -15,7 +15,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
+from sklearn.tree import DecisionTreeRegressor
+from sklearn import tree
 from svr import plot_svr
+from decision_tree import tree_graph
 
 
 
@@ -228,10 +231,29 @@ def non_linear_svr():
         support_vector = SVR(kernel="rbf")
         support_vector.fit(x, y)
         y_pred_svr = scaler_y.inverse_transform(support_vector.predict(x).reshape(-1,1))
+        clear_files_folder()
         plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
         plot_svr(scaler_x, scaler_y, x, y, y_pred_svr, plot_file, column_names)
         return redirect(url_for("plot"))
     return render_template("svr.html", columns=column_names,  footter_message=footer_message)
+
+
+@app.route("/decision_tree", methods=["POST", "GET"])
+def decision_tree():
+    if file_check == False:
+        return redirect(url_for("no_data"))
+    else:
+        column_names = data.columns[:-1]
+        x = data.iloc[:, :-1].values
+        y = data.iloc[:, -1].values
+    if request.method == "POST":
+        tree_reg = DecisionTreeRegressor(max_depth=3, random_state=1234)
+        tree_reg.fit(x, y)      
+        feature_names=list(data.columns)[:-1] 
+        clear_files_folder()
+        tree_graph(tree_reg, plot_file, feature_names)
+        return redirect(url_for("plot"))
+    return render_template("decision_tree.html", columns=column_names,  footter_message=footer_message)
 
 
 
