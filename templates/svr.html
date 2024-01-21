@@ -49,12 +49,12 @@
 
     <article class="main-block">
 
-        <h3 class="Linear-Regression-Title">Polynomial Linear Regression Model</h3>
+        <h3 class="Linear-Regression-Title">Non Linear Support Vector Regression Model</h3>
         <br>
 
         <div class="Linear-Regression-Info">
             <p>The columns that contain text data (categorical), must be encoded. Otherwise the model will not work properly.<br>
-                If that is the case, select the column and press "Encode". The dataset must contain 2 columns, features and target values.
+                If that is the case, select the column and press "Encode". The dataset must contain 2 columns, features and target values.<br>
             </p>
         </div>
 
@@ -68,16 +68,8 @@
                 {% endfor %}
             </select><br>
             <br>
-            <label class="degree-label" for="degree" style="font-size: large;">Insert maximum degree</label><br>
-            <input class="degree" name="degree" type="number" value="Degree"><br>
             <input class="calculate" type="submit" value="Run Model">
         </form><br>
-
-        <div class="Linear-Regression-Info">
-            <p> 
-              The degree defines the maximum power that our features will reach in our polynomial function
-            </p>
-        </div>
 
         {% for message in get_flashed_messages() %}
          <p><strong>{{ message }}</strong></p>

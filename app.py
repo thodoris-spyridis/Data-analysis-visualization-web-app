@@ -11,8 +11,12 @@ from functions import clear_files_folder, linechart, linechart_filled, bar_chart
 from linear_regression import linear_regression_train, plot_linear
 from polynomial import plot_polynomial, simple_encoding
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
+from sklearn.svm import SVR
+from svr import plot_svr
+
 
 
 app = Flask(__name__)
@@ -201,12 +205,33 @@ def polynomial():
         linear_reg_poly = LinearRegression()
         linear_reg_poly.fit(x_poly, y)
         y_pred_poly = linear_reg_poly.predict(x_poly)
-        print(x.shape, y.shape, y_pred_poly.shape)
         clear_files_folder()
         plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
         plot_polynomial(x, y, y_pred_poly, plot_file, column_names) 
         return redirect(url_for("plot"))
     return render_template("polynomial.html", columns=column_names,  footter_message=footer_message)
+
+
+@app.route("/non_linear_svr", methods=["POST", "GET"])
+def non_linear_svr():
+    if file_check == False:
+        return redirect(url_for("no_data"))
+    else:
+        column_names = data.columns[:-1]
+        x = data.iloc[:, -2:-1].values
+        y = data.iloc[:, -1].values.reshape(-1,1)
+    if request.method == "POST":
+        scaler_x = StandardScaler()
+        scaler_y = StandardScaler()
+        x = scaler_x.fit_transform(x)
+        y = scaler_y.fit_transform(y)
+        support_vector = SVR(kernel="rbf")
+        support_vector.fit(x, y)
+        y_pred_svr = scaler_y.inverse_transform(support_vector.predict(x).reshape(-1,1))
+        plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
+        plot_svr(scaler_x, scaler_y, x, y, y_pred_svr, plot_file, column_names)
+        return redirect(url_for("plot"))
+    return render_template("svr.html", columns=column_names,  footter_message=footer_message)
 
 
 
