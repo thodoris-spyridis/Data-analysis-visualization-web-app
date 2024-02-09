@@ -13,7 +13,7 @@ def simple_encoding(lst):
 def plot_polynomial(x, y, y_pred, plot_file, column_names):
     var_score = round(explained_variance_score(y, y_pred), 3)
     mean_score = round(mean_absolute_error(y, y_pred), 3)
-    mean_sqr_score = round(mean_squared_error(y, y_pred), 3)
+    mean_sqr_score = round(mean_squared_error(y, y_pred), 3)/2
     r2 = round(r2_score(y, y_pred), 3)
     plt.scatter(x, y, color="blue", marker="x")
     plt.plot(x, y_pred, color="red", linewidth=2)

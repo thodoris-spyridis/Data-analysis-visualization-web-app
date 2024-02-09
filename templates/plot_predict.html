@@ -40,44 +40,33 @@
                         <a class="nav-link active" href="{{ url_for('visualize') }}">Visualize</a>
                         <a class="nav-link active" href="{{ url_for('linear_regression') }}">Linear Regression</a>
                         <a class="nav-link active" href="{{ url_for('polynomial') }}">Polynomial Regression</a>
-                        <a class="nav-link active" href="{{ url_for('non_linear_svr') }}">Non Linear SVR</a>                      
+                        <a class="nav-link active" href="{{ url_for('non_linear_svr') }}">Non Linear SVR</a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <article class="main-block">
+    <article>
 
-        <h3 class="Linear-Regression-Title">Linear Regression Model</h3>
-        <br>
-
-        <div class="Linear-Regression-Info">
-            <p>The columns that contain text data (categorical), must be encoded. Otherwise the model will not work properly.<br>
-                If that is the case, select the column before running the model.
-            </p>
-        </div>
-
+        <div class="plot-pic" id="plot-pic">
+            <img class="plot-img" src="{{ plot_img }}" alt="plot">
+        </div><br>
+        <a class="download-button" href="{{ plot_img }}" role="button" download="plot.png">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293V6.5z"/>
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+            </svg>
+            Download
+        </a><br>
         <form class="data-form" method="post">
             <br>
-            <label class="categorical-label" for="categorical-column" style="font-size: large;">Select categorical column</label><br>
-            <select class="selection" name="categorical-column" id="categorical-column">
-                <option value="None">None</option>
-                {% for column in columns %}
-                    <option value="{{ column }}">{{ column }}</option>
-                {% endfor %}
-            </select><br>
-            <label class="split-percent-label" for="percent-input" style="font-size: large;">Insert split percentage</label><br>
-            <input class="split-percent" name="percent-input" type="number" value="Split percentage"><br>
-            <input class="calculate" type="submit" value="Run Model">
+            <label class="predict-label" for="predict" style="font-size: large;">Insert features seperated by comma</label><br>
+            <input class="feature-values" name="feature-values" type="text", value="Feature Values">
+            <input class="calculate" type="submit" value="Predict">
         </form><br>
-
-        <div class="Linear-Regression-Info">
-            <p>The split percentage defines the percentage of the dataset that will be used for testing the trained model.</p>
-        </div>
-
         {% for message in get_flashed_messages() %}
-         <p><strong>{{ message }}</strong></p>
+        <h2><span class="result">{{ message }}</span></h2>
         {% endfor %}
 
     </article>

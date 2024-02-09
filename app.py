@@ -13,11 +13,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
-from sklearn.tree import DecisionTreeRegressor
-from linear_regression import linear_regression_train, plot_linear
+# from sklearn.tree import DecisionTreeRegressor
+from linear_regression import plot_linear
 from polynomial import plot_polynomial, simple_encoding
 from svr import plot_svr
-from decision_tree import tree_graph
+# from decision_tree import tree_graph
 
 
 app = Flask(__name__)
@@ -39,7 +39,6 @@ file_check = False
 def upload_file():
     global data
     global file_check
-    
     file_form = UploadFileForm()
     if file_form.validate_on_submit():
         file = file_form.file.data  # Grab the file
@@ -103,6 +102,8 @@ def get_data():
                 result = data[column_name].max()
             elif action == "sum":
                 result = data[column_name].sum()
+            elif action == "standard deviation":
+                result = data[column_name].std()
             else:
                 unique_values = {value for value in data[column_name].to_list()}
                 result = len(unique_values)
@@ -125,6 +126,39 @@ def get_data():
 def plot():
     plot_pic = os.path.join("static", "plots", "plot.png")
     return render_template("plot.html", plot_img=plot_pic)
+
+
+@app.route("/plot_predict", methods=["POST", "GET"])
+def plot_predict():
+    plot_pic = os.path.join("static", "plots", "plot.png")
+    if request.method == "POST":
+        features = request.form["feature-values"].split(",")
+        feature_list = [float(x) for x in features]
+        prediction = regressor.predict([np.array(feature_list)])
+        flash(f"Prediction = {prediction}")
+    return render_template("plot_predict.html", plot_img=plot_pic)
+
+
+@app.route("/plot_predict_poly", methods=["POST", "GET"])
+def plot_predict_poly():
+    plot_pic = os.path.join("static", "plots", "plot.png")
+    if request.method == "POST":
+        features = request.form["feature-values"].split(",")
+        feature_list = [float(x) for x in features]
+        prediction = regressor.predict(linear_reg_poly.fit_transform([np.array(feature_list)]))
+        flash(f"Prediction = {prediction}")
+    return render_template("plot_predict.html", plot_img=plot_pic)
+
+
+@app.route("/plot_predict_svr", methods=["POST", "GET"])
+def plot_predict_svr():
+    plot_pic = os.path.join("static", "plots", "plot.png")
+    if request.method == "POST":
+        features = request.form["feature-values"].split(",")
+        feature_list = [float(x) for x in features]
+        prediction = scaler_y.inverse_transform(regressor.predict(scaler_x.transform([np.array(feature_list)])).reshape(-1,1))
+        flash(f"Prediction = {prediction}")
+    return render_template("plot_predict.html", plot_img=plot_pic)
 
 
 @app.route("/visualize", methods=["POST", "GET"])
@@ -174,6 +208,7 @@ def linear_regression():
     else:
         column_names = data.columns[:-1]
         column_list = list(column_names)
+        global x
         x = data.iloc[:, :-1].values
         y = data.iloc[:, -1].values
     if request.method == "POST":
@@ -181,11 +216,14 @@ def linear_regression():
             column_index = data.columns.get_loc(request.form["categorical-column"])
             x = encode_categorical(x, column_index)
         size = float(request.form["percent-input"]) / 100
-        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=size, random_state=0)  
-        y_pred = linear_regression_train(x_train, y_train, x_test) 
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=size, random_state=0) 
+        global regressor
+        regressor = LinearRegression()
+        regressor.fit(x_train, y_train)
+        y_pred = regressor.predict(x_test)
         clear_files_folder()
         plot_linear(column_list, x_test, y_test, y_pred, plot_file) 
-        return redirect(url_for("plot"))
+        return redirect(url_for("plot_predict"))
     return render_template("linear_regression.html", columns=column_names,  footter_message=footer_message)
 
 
@@ -195,21 +233,24 @@ def polynomial():
         return redirect(url_for("no_data"))
     else:
         column_names = data.columns[:-1]
+        global x
         x = data.iloc[:, -2:-1].values
         y = data.iloc[:, -1].values
     if request.method == "POST":
         if request.form["categorical-column"] != "None":
             x = np.array(simple_encoding(list(x)))
         degree = int(request.form["degree"])
-        poly_reg = PolynomialFeatures(degree=degree)
-        x_poly = poly_reg.fit_transform(x)
-        linear_reg_poly = LinearRegression()
-        linear_reg_poly.fit(x_poly, y)
-        y_pred_poly = linear_reg_poly.predict(x_poly)
+        global regressor
+        global linear_reg_poly
+        linear_reg_poly = PolynomialFeatures(degree=degree)
+        x_poly = linear_reg_poly.fit_transform(x)
+        regressor = LinearRegression()
+        regressor.fit(x_poly, y)
+        y_pred_poly = regressor.predict(x_poly)
         clear_files_folder()
         plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
         plot_polynomial(x, y, y_pred_poly, plot_file, column_names) 
-        return redirect(url_for("plot"))
+        return redirect(url_for("plot_predict_poly"))
     return render_template("polynomial.html", columns=column_names,  footter_message=footer_message)
 
 
@@ -219,42 +260,46 @@ def non_linear_svr():
         return redirect(url_for("no_data"))
     else:
         column_names = data.columns[:-1]
+        global x
         x = data.iloc[:, -2:-1].values
         y = data.iloc[:, -1].values.reshape(-1,1)
     if request.method == "POST":
+        global scaler_y     
+        global scaler_x   
         scaler_x = StandardScaler()
         scaler_y = StandardScaler()
         x = scaler_x.fit_transform(x)
         y = scaler_y.fit_transform(y)
-        support_vector = SVR(kernel="rbf")
-        support_vector.fit(x, y)
-        y_pred_svr = scaler_y.inverse_transform(support_vector.predict(x).reshape(-1,1))
+        global regressor
+        regressor = SVR(kernel="rbf")
+        regressor.fit(x, y)
+        y_pred_svr = scaler_y.inverse_transform(regressor.predict(x).reshape(-1,1))
         clear_files_folder()
         plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
         plot_svr(scaler_x, scaler_y, x, y, y_pred_svr, plot_file, column_names)
-        return redirect(url_for("plot"))
+        return redirect(url_for("plot_predict_svr"))
     return render_template("svr.html", columns=column_names,  footter_message=footer_message)
 
 
-@app.route("/decision_tree", methods=["POST", "GET"])
-def decision_tree():
-    if file_check == False:
-        return redirect(url_for("no_data"))
-    else:
-        column_names = data.columns[:-1]
-        x = data.iloc[:, :-1].values
-        y = data.iloc[:, -1].values
-    if request.method == "POST":
-        if request.form["categorical-column"] != "None":
-            column_index = data.columns.get_loc(request.form["categorical-column"])
-            x = encode_categorical(x, column_index)
-        tree_reg = DecisionTreeRegressor(max_depth=3, random_state=1234)
-        tree_reg.fit(x, y)      
-        feature_names=list(data.columns)[:-1] 
-        clear_files_folder()
-        tree_graph(tree_reg, plot_file, feature_names)
-        return redirect(url_for("plot"))
-    return render_template("decision_tree.html", columns=column_names,  footter_message=footer_message)
+# @app.route("/decision_tree", methods=["POST", "GET"])
+# def decision_tree():
+#     if file_check == False:
+#         return redirect(url_for("no_data"))
+#     else:
+#         column_names = data.columns[:-1]
+#         x = data.iloc[:, :-1].values
+#         y = data.iloc[:, -1].values
+#     if request.method == "POST":
+#         if request.form["categorical-column"] != "None":
+#             column_index = data.columns.get_loc(request.form["categorical-column"])
+#             x = encode_categorical(x, column_index)
+#         tree_reg = DecisionTreeRegressor(max_depth=3, random_state=1234)
+#         tree_reg.fit(x, y)      
+#         feature_names=list(data.columns)[:-1] 
+#         clear_files_folder()
+#         tree_graph(tree_reg, plot_file, feature_names)
+#         return redirect(url_for("plot"))
+#     return render_template("decision_tree.html", columns=column_names,  footter_message=footer_message)
 
 
 if __name__ == "__main__":
