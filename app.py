@@ -249,7 +249,7 @@ def polynomial():
         y_pred_poly = regressor.predict(x_poly)
         clear_files_folder()
         plt.figure(figsize=(14, 5), facecolor="#e4f1fe")
-        plot_polynomial(x, y, y_pred_poly, plot_file, column_names) 
+        plot_polynomial(x, y, y_pred_poly, plot_file, data.columns) 
         return redirect(url_for("plot_predict_poly"))
     return render_template("polynomial.html", columns=column_names,  footter_message=footer_message)
 
