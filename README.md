@@ -1,4 +1,3 @@
-# Data-analysis-visualization-web-app
-Data analysis-visualization web app with Flask (masters degree asignment)  
-The user can upload an excel file and get data calculations, plotting  
-and fit the data to regression machine learning models.
+I made this app for my Masters Degree assignment and to get more familiar with web development./
+The main idea is that a user can upload data and get statistical info and visualizations about the dataset./
+It is still a work in progress..
